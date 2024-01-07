@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+    <title>Labirinto</title>
+</head>
+<body>
+    <div id="labirinto"></div>
+
+    <script>
+        // Função para criar um labirinto com paredes aleatórias
+        function generateTable(heightFire, widthFire) {
+            let tableHtml = '<table><tbody>';
+
+            for (let row = 0; row < heightFire; row++) {
+                tableHtml += '<tr>';
+
+                for (let column = 0; column < widthFire; column++) {
+                    const index = row * widthFire + column;
+
+                    tableHtml += '<td style="background: #ddd;">';
+                    tableHtml += '.';
+                    tableHtml += '</td>';
+                }
+                tableHtml += '</tr>';
+            }
+            tableHtml += '</tbody></table>';
+
+            document.getElementById('labirinto').innerHTML = tableHtml;
+        }
+        window.onload = () => generateTable(10,10);
+    </script>
+</body>
+</html>
