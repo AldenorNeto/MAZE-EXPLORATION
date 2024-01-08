@@ -73,18 +73,29 @@
     }
 
     .initPoint{
-      background-color: green;
+      background-color: #00800077;
+      z-index: 2;
     }
   </style>
   <title>Labirinto</title>
 </head>
 <body>
-  <div id="labirinto"></div>
   <script>
     const mazeSize = 10;
     const countCellsInMaze = mazeSize ** 2;
-    const initPoint = Math.floor(Math.random() * countCellsInMaze);
+    let initPoint = Math.floor(Math.random() * countCellsInMaze);
     const endPoint = Math.floor(Math.random() * countCellsInMaze);
+
+    let labirinto = document.createElement('div');
+      labirinto.id = 'labirinto';
+      document.body.appendChild(labirinto);
+
+    const checkVictory = () => {
+      if(initPoint === endPoint){
+        setTimeout(() => alert('Parabéns, você venceu!'), 1)
+        
+      }
+    }
 
     const mazeData = new Array(countCellsInMaze).fill().map((v, i) => {
       const section = {
@@ -98,8 +109,8 @@
       }
       return section
     })
-    // Função para criar um labirinto com paredes aleatórias
-    function generateTable(mazeSize) {
+
+    function generateTable() {
       let tableHtml = '<table><tbody>';
 
       for (let row = 0; row < mazeSize; row++) {
@@ -112,10 +123,10 @@
           if(mazeData[index].top){
             tableHtml += '<div class="vertical"></div>';
           }
-          if(mazeData[index].initPoint){
+          if(initPoint === index){
             tableHtml += '<div class="initPoint"></div>';
           }
-          if(mazeData[index].endPoint){
+          if(endPoint === index){
             tableHtml += '<div class="endPoint"></div>';
           }
           if(mazeData[index].left){
@@ -127,9 +138,61 @@
       }
       tableHtml += '</tbody></table>';
 
-      document.getElementById('labirinto').innerHTML = tableHtml;
+      labirinto.innerHTML = tableHtml;
     }
-    window.onload = () => generateTable(10,10);
+
+    document.addEventListener('keydown', (event) => {
+      let teclaPressionada = event.key;
+      let currentPoint = initPoint;
+
+      console.log(mazeData[currentPoint])
+      if(teclaPressionada === 'd'){
+
+      }
+
+      switch (teclaPressionada) {
+        case 'a':
+          if(mazeData[currentPoint].left){
+            return;
+          }
+          if(!(currentPoint % mazeSize === 0)){ 
+            currentPoint--;
+          }
+          break;
+        case 's':
+          currentPoint += mazeSize;
+          if(mazeData[currentPoint].top){
+            return;
+          }
+          break;
+        case 'd':
+          if(!((currentPoint + 1) % mazeSize === 0)){
+            currentPoint++;
+            if(mazeData[currentPoint].left){
+              return;
+            }
+          }
+          break;
+        case 'w':
+          if(mazeData[currentPoint].top){
+            return;
+          }
+          currentPoint -= mazeSize;
+          break;
+        default:
+          break;
+      }
+
+      if(!(currentPoint < 0 || currentPoint >= countCellsInMaze)){
+        initPoint = currentPoint;
+      }
+      generateTable();
+      checkVictory();
+    });
+
+    window.onload = () => {
+      generateTable();
+    }
   </script>
 </body>
 </html>
